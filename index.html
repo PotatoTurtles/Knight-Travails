@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knight Travails</title>
+</head>
+<body>
+    <script>
+        function knightMoves(start,end,hasDone=[]){
+
+            if(hasPlace(hasDone,start)) return
+
+            if(!isBound(start)) return
+
+            if(start[0] === end[0] && start[1] === end[1]) return [end]
+
+            let paths = []
+            paths.push(knightMoves([start[0]+1,start[1]+2],end,[...hasDone,start]))
+            paths.push(knightMoves([start[0]+2,start[1]+1],end,[...hasDone,start]))
+
+            paths.push(knightMoves([start[0]-1,start[1]+2],end,[...hasDone,start]))
+            paths.push(knightMoves([start[0]-2,start[1]+1],end,[...hasDone,start]))
+            paths.push(knightMoves([start[0]+1,start[1]-2],end,[...hasDone,start]))
+            paths.push(knightMoves([start[0]+2,start[1]-1],end,[...hasDone,start]))
+
+            paths.push(knightMoves([start[0]-1,start[1]-2],end,[...hasDone,start]))
+            paths.push(knightMoves([start[0]-2,start[1]-1],end,[...hasDone,start]))
+
+            paths = paths.filter((e)=>(e));
+
+            if(paths.length>0){
+                let smallest = paths[0];
+
+                for(let i = 0; i<paths.length;i++){
+                    if(smallest.length>=paths[i].length){
+                        smallest=paths[i];
+                    }
+                }
+                return [...hasDone,...smallest]
+            }
+        }
+        function isBound(place){
+            if(place[0]>=0&&place[0]<=7&&place[1]>=0&&place[1]<=7){
+                return true
+            }
+            return false
+        }
+        function hasPlace(arr, start) {
+            return arr.some(e => e[0] === start[0] && e[1] === start[1]);
+        }
+
+        console.log(knightMoves([0,0],[1,2]));
+    </script>
+</body>
+</html>
