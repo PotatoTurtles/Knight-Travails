@@ -7,38 +7,61 @@
 </head>
 <body>
     <script>
-        function knightMoves(start,end,hasDone=[]){
+        function knightMoves(start,end){
 
-            if(hasPlace(hasDone,start)) return
+            let queue = [{"position":start,"path":[start]}]
 
-            if(!isBound(start)) return
+            let hasBeen = []
 
-            if(start[0] === end[0] && start[1] === end[1]) return [end]
+            while(queue.length>0){
+                let current = queue.shift();
+                hasBeen.push(current["position"].toString())
 
-            let paths = []
-            paths.push(knightMoves([start[0]+1,start[1]+2],end,[...hasDone,start]))
-            paths.push(knightMoves([start[0]+2,start[1]+1],end,[...hasDone,start]))
+                if(isBound(current["position"])){
+                    if(current["position"].toString()==end.toString()) return pretty(current["path"]);
+                    
+                    if(!hasBeen.includes([current["position"][0]+1,current["position"][1]+2].toString())){
+                        queue.push({"position":[current["position"][0]+1,current["position"][1]+2],
+                        "path":[...current["path"],[current["position"][0]+1,current["position"][1]+2]]})
+                    }
 
-            paths.push(knightMoves([start[0]-1,start[1]+2],end,[...hasDone,start]))
-            paths.push(knightMoves([start[0]-2,start[1]+1],end,[...hasDone,start]))
-            paths.push(knightMoves([start[0]+1,start[1]-2],end,[...hasDone,start]))
-            paths.push(knightMoves([start[0]+2,start[1]-1],end,[...hasDone,start]))
+                    if(!hasBeen.includes([current["position"][0]+2,current["position"][1]+1].toString())){
+                        queue.push({"position":[current["position"][0]+2,current["position"][1]+1],
+                        "path":[...current["path"],[current["position"][0]+2,current["position"][1]+1]]})
+                    }
 
-            paths.push(knightMoves([start[0]-1,start[1]-2],end,[...hasDone,start]))
-            paths.push(knightMoves([start[0]-2,start[1]-1],end,[...hasDone,start]))
+                    if(!hasBeen.includes([current["position"][0]-1,current["position"][1]+2].toString())){
+                        queue.push({"position":[current["position"][0]-1,current["position"][1]+2],
+                        "path":[...current["path"],[current["position"][0]-1,current["position"][1]+2]]})
+                    }
 
-            paths = paths.filter((e)=>(e));
+                    if(!hasBeen.includes([current["position"][0]-2,current["position"][1]+1].toString())){
+                        queue.push({"position":[current["position"][0]-2,current["position"][1]+1],
+                        "path":[...current["path"],[current["position"][0]-2,current["position"][1]+1]]})
+                    }
 
-            if(paths.length>0){
-                let smallest = paths[0];
+                    if(!hasBeen.includes([current["position"][0]+1,current["position"][1]-2].toString())){
+                        queue.push({"position":[current["position"][0]+1,current["position"][1]-2],
+                        "path":[...current["path"],[current["position"][0]+1,current["position"][1]-2]]})
+                    }
 
-                for(let i = 0; i<paths.length;i++){
-                    if(smallest.length>=paths[i].length){
-                        smallest=paths[i];
+                    if(!hasBeen.includes([current["position"][0]+2,current["position"][1]-1].toString())){
+                        queue.push({"position":[current["position"][0]+2,current["position"][1]-1],
+                        "path":[...current["path"],[current["position"][0]+2,current["position"][1]-1]]})
+                    }
+
+                    if(!hasBeen.includes([current["position"][0]-1,current["position"][1]-2].toString())){
+                        queue.push({"position":[current["position"][0]-1,current["position"][1]-2],
+                        "path":[...current["path"],[current["position"][0]-1,current["position"][1]-2]]})
+                    }
+
+                    if(!hasBeen.includes([current["position"][0]-2,current["position"][1]-1].toString())){
+                        queue.push({"position":[current["position"][0]-2,current["position"][1]-1],
+                        "path":[...current["path"],[current["position"][0]-2,current["position"][1]-1]]})
                     }
                 }
-                return [...hasDone,...smallest]
             }
+            return -1
         }
         function isBound(place){
             if(place[0]>=0&&place[0]<=7&&place[1]>=0&&place[1]<=7){
@@ -46,11 +69,18 @@
             }
             return false
         }
-        function hasPlace(arr, start) {
-            return arr.some(e => e[0] === start[0] && e[1] === start[1]);
+        function pretty(arr){
+            if(arr.length>0){
+                let send = `${arr[0]}`;
+                for(let i = 1; i<arr.length;i++){
+                    send+=` --> ${arr[i]}`
+                }
+                return send
+            }
+            return "null"
         }
 
-        console.log(knightMoves([0,0],[1,2]));
+        console.log(knightMoves([0,0],[7,7]));
     </script>
 </body>
 </html>
